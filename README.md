@@ -31,3 +31,7 @@ Este projeto fornece a implementação de uma api referenet à um sistema de hos
 ## Interface para descrever API - Swagger
 
     Endereço: http://localhost:8080/swagger-ui.html
+
+## EXTRA (Deploy no Heroku)
+
+    link: https://hotel-restapi.herokuapp.com/swagger-ui.html#/
