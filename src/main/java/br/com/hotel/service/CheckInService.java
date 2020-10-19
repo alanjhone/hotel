@@ -3,6 +3,7 @@
  */
 package br.com.hotel.service;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hotel.dtos.CheckInDTO;
+import br.com.hotel.exceptions.CustomNotFoundException;
 import br.com.hotel.helper.Geral;
 import br.com.hotel.models.CheckIn;
 import br.com.hotel.models.Hospede;
@@ -64,6 +66,14 @@ public class CheckInService implements IGenericCrud<CheckIn>{
 	
 	/* ------------- COMPUTACAO --------------- */
 	
+	public void verificarValidacao(CheckIn checkIn) {
+		if(checkIn.getDataSaida() != null && checkIn.getDataEntrada().after(checkIn.getDataSaida()))
+			throw new CustomNotFoundException(Utils.MSG_COMPARACAO_DATA_ENTRADA);
+
+	}
+	
+	/* ----------------- VALIDACAO --------------*/
+	
 	@Autowired
 	private CheckInRepository checkInRepository;
 
@@ -82,13 +92,15 @@ public class CheckInService implements IGenericCrud<CheckIn>{
 		return checkInRepository.save(checkIn);
 	}
 	
-	public CheckIn salvarOuAtualizar(CheckInDTO dto, Long id) {
+	public CheckIn salvarOuAtualizar(CheckInDTO dto, Long id){
 		CheckIn checkin = dto.transformaParaObjeto();
 		
 		if(id != null) {
 			checkin.setId(id);
 		}
-			
+		
+		verificarValidacao(checkin);
+		
 		checkin.setValorTotal(calcularValorTotalDiaria(checkin));
 		
 		CheckIn in = checkInRepository.valorUltimaHospedagemPorId(checkin.getHospede().getId(), checkin.getDataEntrada().getTime());

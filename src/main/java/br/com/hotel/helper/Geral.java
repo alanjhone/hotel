@@ -28,6 +28,13 @@ public class Geral {
 		return (dia == Calendar.SUNDAY);
 	}
 	
+	public static boolean isValidDate(String data) {
+		if(convertToCalendar(data) != null) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static Calendar convertToCalendar(String data) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date date;
@@ -35,11 +42,11 @@ public class Geral {
 		try {
 			date = formatter.parse(data);
 	        calendar.setTime(date);
-	        return calendar;
 		} catch (ParseException e) {
 			e.printStackTrace();
+			return null;
 		}
-        return calendar;
+		return calendar;
 	}
 	
 	public static String converToString(Calendar calendar) {

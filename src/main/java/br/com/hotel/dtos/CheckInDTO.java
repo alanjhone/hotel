@@ -3,6 +3,7 @@
  */
 package br.com.hotel.dtos;
 
+import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
@@ -15,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 
+import br.com.hotel.helper.DataInvalida;
 import br.com.hotel.helper.Geral;
 import br.com.hotel.models.CheckIn;
 import br.com.hotel.models.Hospede;
@@ -32,8 +34,10 @@ public class CheckInDTO {
 	private Hospede hospede;
 	
 	@NotBlank(message = "Informar data de entrada")
+	@DataInvalida(message = "Formato de data inválido")
 	private String dataEntrada;
-		
+	
+	@DataInvalida(message = "Formato de data inválido")
 	private String dataSaida;
 	
 	private boolean adicionalVeiculo;

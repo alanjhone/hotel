@@ -3,12 +3,15 @@
  */
 package br.com.hotel.controllers;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,14 +66,14 @@ public class CheckInController {
 	
 	@PostMapping(value="/checkin")
 	@ApiOperation(value = "Faz um check in")
-	ResponseEntity<CheckInRespostaDTO> salvar(@RequestBody @Valid CheckInDTO checkInDTO) {
+	ResponseEntity<CheckInRespostaDTO> salvar(@RequestBody @Valid CheckInDTO checkInDTO){
 		CheckIn checkIn = checkInService.salvarOuAtualizar(checkInDTO, null);
 		return ResponseEntity.ok().body(CheckInRespostaDTO.transformaEmDTO(checkIn)); 
 	}
 	
     @PutMapping(value="/checkin/{id}")
     @ApiOperation(value = "Atualiza um check in")
-    ResponseEntity<CheckInRespostaDTO> atualizar(@PathVariable("id")  int id, @RequestBody @Valid CheckInDTO checkInDTO) {
+    ResponseEntity<CheckInRespostaDTO> atualizar(@PathVariable("id")  int id, @RequestBody @Valid CheckInDTO checkInDTO) throws ParseException {
     	CheckIn c = checkInService.findById(id)
                                     .orElseThrow(()->new CustomNotFoundException(Utils.MSG_REGISTO_NAO_ENCONTRADO + id));
         
